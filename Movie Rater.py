@@ -54,18 +54,23 @@ class RatingGUI:
         self.prevbtn = Button(parent, text = "Previous", bg = "#801bb3", fg = "white", font = ("Sans Serif", 14), command = self.prevmovie)
         self.prevbtn.grid(row = 7, column = 0, sticky = NW)
 
+
     def nextmovie(self):
+        self.movie_info[self.i].rating = self.var.get()
         if self.i != (len(self.movie_info)-1):
             self.i+=1
         else:
             self.i = 0
+        self.var.set(0)
         self.movie_title.configure(text = self.movie_info[self.i].movie)
 
     def prevmovie(self):
+        self.movie_info[self.i].rating = self.var.get()
         if self.i !=0:
             self.i-=1
         else:
             self.i = (len(self.movie_info)-1)
+        self.var.set(0)
         self.movie_title.configure(text = self.movie_info[self.i].movie)
           
                             
