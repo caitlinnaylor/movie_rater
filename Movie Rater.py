@@ -56,7 +56,8 @@ class RatingGUI:
 
 
     def nextmovie(self):
-        self.movie_info[self.i].rating = self.var.get()
+        if self.var.get() != "0":
+            self.movie_info[self.i].rating = self.var.get()
         if self.i != (len(self.movie_info)-1):
             self.i+=1
         else:
@@ -64,8 +65,10 @@ class RatingGUI:
         self.var.set(0)
         self.movie_title.configure(text = self.movie_info[self.i].movie)
 
+
     def prevmovie(self):
-        self.movie_info[self.i].rating = self.var.get()
+        if self.var.get() != "0":
+            self.movie_info[self.i].rating = self.var.get()
         if self.i !=0:
             self.i-=1
         else:
