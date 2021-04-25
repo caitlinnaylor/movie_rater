@@ -140,21 +140,24 @@ class RatingGUI:
     def get_to_summary_frame(self):
         summary_rating = self.var_two.get() 
         print(summary_rating) #remember to remove once tested
-        for widget in self.f1.winfo_children():
-            widget.destroy()
+##        for widget in self.f1.winfo_children():
+##            widget.destroy()
         self.f1.grid_forget()
-        self.summary_frame()
+##        self.summary_frame()
+        SummaryFrameGUI(root)
 
-    def summary_frame(self):
-        test = Label(self.f1, text = "Summary Frame", bg = "#d4a8ed")
-        test.grid(row = 0, column = 0)
-        self.f1.grid(row = 0, column = 0)
-  
-##class SummaryFrameGUI:
-##    def __init__(self, parent):
+##    def summary_frame(self):
 ##        test = Label(self.f1, text = "Summary Frame", bg = "#d4a8ed")
 ##        test.grid(row = 0, column = 0)
 ##        self.f1.grid(row = 0, column = 0)
+  
+class SummaryFrameGUI:
+    def __init__(self, parent):
+        self.f1 = Frame(parent)
+        self.f1.configure(bg = "#d4a8ed")
+        test = Label(self.f1, text = "Summary Frame", bg = "#d4a8ed")
+        test.grid(row = 0, column = 0)
+        self.f1.grid(row = 0, column = 0)
                  
           
                             
