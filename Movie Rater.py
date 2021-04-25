@@ -13,8 +13,8 @@ class Movies:
 class RatingGUI:
     def __init__(self, parent, Movies, default):
         #Frame One
-        f1 = Frame(parent)
-        f1.configure(bg = "#d4a8ed")
+        self.f1 = Frame(parent)
+        self.f1.configure(bg = "#d4a8ed")
         self.default = default
         self.i = 0 #which movie is being rated
         #List of movies that the user can rate
@@ -33,17 +33,17 @@ class RatingGUI:
                            Movies("Ant-Man", self.default)]
         #Labels
 
-        self.movie_instruct = Label(f1, text = "Please Rate:", anchor = NW, bg = "black",
+        self.movie_instruct = Label(self.f1, text = "Please Rate:", anchor = NW, bg = "black",
                                     fg = "white", font = ("Sans Serif", 20), width = 15,
                                     pady = 20, padx = 20)
         self.movie_instruct.grid(row = 0, column = 0)
 
-        self.movie_title = Label(f1, text= self.movie_info[self.i].movie, bg = "black",
+        self.movie_title = Label(self.f1, text= self.movie_info[self.i].movie, bg = "black",
                                  fg = "white", font = ("Sans Serif", 20), anchor = NW,
                                  pady = 20, padx = 20, width = 18)
         self.movie_title.grid(row = 0, column = 1, columnspan = 3)
 
-        self.rating_instruct = Label(f1, text = "Your Rating:", anchor = NW, fg = "black",
+        self.rating_instruct = Label(self.f1, text = "Your Rating:", anchor = NW, fg = "black",
                                      font = ("Sans Serif", 18), pady = 20, bg = "#d4a8ed",
                                      padx = 20)
         self.rating_instruct.grid(row = 1, column = 0, sticky = NW)
@@ -53,30 +53,30 @@ class RatingGUI:
         self.var = StringVar()
         self.var.set(0)
         self.num_radiobuttons = 6
-        self.rbs = [Radiobutton(f1, text = self.default, value = self.default,
+        self.rbs = [Radiobutton(self.f1, text = self.default, value = self.default,
                                 variable = self.var, fg = "black", font = ("Sans Serif", 14),
                                 pady = 20, bg = "#d4a8ed")]
 
-        self.space_holder= Label(f1, text = "", padx = 20, bg ="#d4a8ed" )
+        self.space_holder= Label(self.f1, text = "", padx = 20, bg ="#d4a8ed" )
         self.space_holder.grid(row = 1, column = 1)
 
         for i in range(self.num_radiobuttons):
-            self.rbs.append(Radiobutton(f1, text = f"{i+1}/5", value = f"{i+1}/5",
+            self.rbs.append(Radiobutton(self.f1, text = f"{i+1}/5", value = f"{i+1}/5",
                                         variable = self.var, fg = "black",
                                         font = ("Sans Serif", 14), pady = 10, bg = "#d4a8ed"))
             self.rbs[i].grid(row = i+1, column = 2, sticky = NW)
 
         #Next and Previous Buttons
             
-        self.nextbtn = Button(f1, text = "Next", bg = "#801bb3", fg = "white",
+        self.nextbtn = Button(self.f1, text = "Next", bg = "#801bb3", fg = "white",
                               font = ("Sans Serif", 14), command = self.nextmovie)
         self.nextbtn.grid(row = 7, column = 3, sticky = NE)
 
-        self.prevbtn = Button(f1, text = "Previous", bg = "#801bb3", fg = "white",
+        self.prevbtn = Button(self.f1, text = "Previous", bg = "#801bb3", fg = "white",
                               font = ("Sans Serif", 14), command = self.prevmovie)
         self.prevbtn.grid(row = 7, column = 0, sticky = NW)
 
-        f1.grid(column = 0, row = 0)
+        self.f1.grid(column = 0, row = 0)
 
         #Frame Two
         f2 = Frame(parent)
@@ -110,7 +110,7 @@ class RatingGUI:
 
         #Search Button
 
-        self.searchbtn = Button(f2, text = "Go", bg = "white", fg = "black", font = ("Sans Serif", 14))
+        self.searchbtn = Button(f2, text = "Go", bg = "white", fg = "black", font = ("Sans Serif", 14), command = self.get_to_summary_frame)
         self.searchbtn.grid(row = 11, column = 3, sticky = NW)
 
         f2.grid(column = 0, row = 8)
@@ -136,6 +136,26 @@ class RatingGUI:
             self.i = (len(self.movie_info)-1)
         self.var.set(0)
         self.movie_title.configure(text = self.movie_info[self.i].movie)
+
+    def get_to_summary_frame(self):
+        summary_rating = self.var_two.get() 
+        print(summary_rating) #remember to remove once tested
+        for widget in self.f1.winfo_children():
+            widget.destroy()
+        self.f1.grid_forget()
+        self.summary_frame()
+
+    def summary_frame(self):
+        test = Label(self.f1, text = "Summary Frame", bg = "#d4a8ed")
+        test.grid(row = 0, column = 0)
+        self.f1.grid(row = 0, column = 0)
+  
+##class SummaryFrameGUI:
+##    def __init__(self, parent):
+##        test = Label(self.f1, text = "Summary Frame", bg = "#d4a8ed")
+##        test.grid(row = 0, column = 0)
+##        self.f1.grid(row = 0, column = 0)
+                 
           
                             
 #Main Routine
