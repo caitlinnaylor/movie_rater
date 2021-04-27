@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter.scrolledtext import *
 #25/04/21
 #Caitlin Naylor
 #Movie Rater
@@ -10,7 +11,7 @@ class Movies:
         self.movie_info = [self.movie, self.rating]
         
 
-class RatingGUI:
+class MovieRaterGUI:
     def __init__(self, parent, Movies, default):
         #Frame One
         self.f1 = Frame(parent)
@@ -110,7 +111,8 @@ class RatingGUI:
 
         #Search Button
 
-        self.searchbtn = Button(f2, text = "Go", bg = "white", fg = "black", font = ("Sans Serif", 14), command = self.get_to_summary_frame)
+        self.searchbtn = Button(f2, text = "Go", bg = "white", fg = "black", font = ("Sans Serif", 14),
+                                command = self.get_to_summary_frame)
         self.searchbtn.grid(row = 11, column = 3, sticky = NW)
 
         f2.grid(column = 0, row = 8)
@@ -137,34 +139,55 @@ class RatingGUI:
         self.var.set(0)
         self.movie_title.configure(text = self.movie_info[self.i].movie)
 
+        
     def get_to_summary_frame(self):
-        summary_rating = self.var_two.get() 
-        print(summary_rating) #remember to remove once tested
-##        for widget in self.f1.winfo_children():
-##            widget.destroy()
-        self.f1.grid_forget()
-##        self.summary_frame()
-        SummaryFrameGUI(root)
+        self.summary_rating = self.var_two.get()
+        #code modified from
+        #https://stackoverflow.com/questions/50656826/how-can-i-delete-the-content-in-a-tkinter-frame/50657381 
+        for widget in self.f1.winfo_children():
+            widget.destroy()
 
-##    def summary_frame(self):
-##        test = Label(self.f1, text = "Summary Frame", bg = "#d4a8ed")
-##        test.grid(row = 0, column = 0)
-##        self.f1.grid(row = 0, column = 0)
-  
-class SummaryFrameGUI:
-    def __init__(self, parent):
-        self.f1 = Frame(parent)
-        self.f1.configure(bg = "#d4a8ed")
-        test = Label(self.f1, text = "Summary Frame", bg = "#d4a8ed")
-        test.grid(row = 0, column = 0)
+        self.summary()
+
+
+    def summary(self):
+        self.f1.configure(bg = "#d4a8ed", padx = 42, pady = 40)
+        self.var.set(0)
+        #Label identifying which rating has been searched for
+        self.rating_label = Label(self.f1, text = self.summary_rating, bg = "#d4a8ed", fg = "black",
+                                  font = ("Sans Serif", 24))
+        self.rating_label.grid(row = 0, column = 1, sticky = NW)
+
+        #Back button to rate more movies
+
+        backbtn = Button(self.f1, text = "Rate more movies", bg = "#801bb3", fg = "white", font = ("Sans Serif", 14))
+        backbtn.grid(row = 0, column = 0, sticky = NW)
+
+        #Scrolled Text Box of movies under that rating
+
+        self.rated_movie_list = [] #list of movies in that rating
+        
+        self.rated_movies = ScrolledText(self.f1, wrap = 'word', font = ("Sans Serif", 20), width = 34, height = 10) #Text Box
+
+        for i in range(len(self.movie_info)): #adding movies that have been rated to the list
+                if self.movie_info[i].rating == self.summary_rating:
+                    self.rated_movie_list.append(self.movie_info[i].movie)
+
+        for i in range(len(self.rated_movie_list)):        
+            self.rated_movies.insert('1.0', """
+""")#each movie on seperate lines
+            self.rated_movies.insert('1.0',self.rated_movie_list[i]) #Inserting rated movies into Text Box
+        self.rated_movies.configure(state = 'disabled') #Disabling so the box is not typable in
+        self.rated_movies.grid(row = 1, column = 0, columnspan = 2)
+            
         self.f1.grid(row = 0, column = 0)
-                 
-          
-                            
+
+                                         
 #Main Routine
 if __name__=="__main__":
     root= Tk()
-    ratings = RatingGUI(root, Movies, "No Rating")
+    ratings = MovieRaterGUI(root, Movies, "No Rating")
     root.title("Movie Rater")
+    root.geometry("616x643+0+0")
     root.mainloop()
 
