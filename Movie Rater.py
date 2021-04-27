@@ -117,6 +117,8 @@ class MovieRaterGUI:
 
         f2.grid(column = 0, row = 8)
 
+        self.f3 = Frame(parent)
+
     #Methods - each correlates to a button  
     def nextmovie(self):
         if self.var.get() != "0":
@@ -142,32 +144,30 @@ class MovieRaterGUI:
         
     def get_to_summary_frame(self):
         self.summary_rating = self.var_two.get()
-        #code modified from
-        #https://stackoverflow.com/questions/50656826/how-can-i-delete-the-content-in-a-tkinter-frame/50657381 
-        for widget in self.f1.winfo_children():
-            widget.destroy()
+        self.f1.grid_remove()
 
         self.summary()
 
 
     def summary(self):
-        self.f1.configure(bg = "#d4a8ed", padx = 42, pady = 40)
+        self.f3.configure(bg = "#d4a8ed", padx = 42, pady = 40)
         self.var.set(0)
         #Label identifying which rating has been searched for
-        self.rating_label = Label(self.f1, text = self.summary_rating, bg = "#d4a8ed", fg = "black",
+        self.rating_label = Label(self.f3, text = self.summary_rating, bg = "#d4a8ed", fg = "black",
                                   font = ("Sans Serif", 24))
         self.rating_label.grid(row = 0, column = 1, sticky = NW)
 
         #Back button to rate more movies
 
-        backbtn = Button(self.f1, text = "Rate more movies", bg = "#801bb3", fg = "white", font = ("Sans Serif", 14))
+        backbtn = Button(self.f3, text = "Rate more movies", bg = "#801bb3", fg = "white", font = ("Sans Serif", 14),
+                         command = self.back_to_rater)
         backbtn.grid(row = 0, column = 0, sticky = NW)
 
         #Scrolled Text Box of movies under that rating
 
         self.rated_movie_list = [] #list of movies in that rating
         
-        self.rated_movies = ScrolledText(self.f1, wrap = 'word', font = ("Sans Serif", 20), width = 34, height = 10) #Text Box
+        self.rated_movies = ScrolledText(self.f3, wrap = 'word', font = ("Sans Serif", 20), width = 34, height = 10) #Text Box
 
         for i in range(len(self.movie_info)): #adding movies that have been rated to the list
                 if self.movie_info[i].rating == self.summary_rating:
@@ -180,6 +180,10 @@ class MovieRaterGUI:
         self.rated_movies.configure(state = 'disabled') #Disabling so the box is not typable in
         self.rated_movies.grid(row = 1, column = 0, columnspan = 2)
             
+        self.f3.grid(row = 0, column = 0)
+
+    def back_to_rater(self):
+        self.f3.grid_remove()
         self.f1.grid(row = 0, column = 0)
 
                                          
