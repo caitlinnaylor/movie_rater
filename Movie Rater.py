@@ -17,6 +17,7 @@ class MovieRaterGUI:
         self.f1 = Frame(parent)
         self.f1.configure(bg = "#d4a8ed")
         self.default = default
+        self.summary_rating = ""
         self.i = 0 #which movie is being rated
         #List of movies that the user can rate
         self.movie_info = [Movies("The Hobbit", self.default),
@@ -56,7 +57,7 @@ class MovieRaterGUI:
         self.num_radiobuttons = 6
         self.rbs = [Radiobutton(self.f1, text = self.default, value = self.default,
                                 variable = self.var, fg = "black", font = ("Sans Serif", 14),
-                                pady = 20, bg = "#d4a8ed")]
+                                pady = 20, bg = "#d4a8ed",activebackground = "#d4a8ed")]
 
         self.space_holder= Label(self.f1, text = "", padx = 20, bg ="#d4a8ed" )
         self.space_holder.grid(row = 1, column = 1)
@@ -64,7 +65,8 @@ class MovieRaterGUI:
         for i in range(self.num_radiobuttons):
             self.rbs.append(Radiobutton(self.f1, text = f"{i+1}/5", value = f"{i+1}/5",
                                         variable = self.var, fg = "black",
-                                        font = ("Sans Serif", 14), pady = 10, bg = "#d4a8ed"))
+                                        font = ("Sans Serif", 14), pady = 10, bg = "#d4a8ed",
+                                        activebackground = "#d4a8ed"))
             self.rbs[i].grid(row = i+1, column = 2, sticky = NW)
 
         #Next and Previous Buttons
@@ -97,12 +99,14 @@ class MovieRaterGUI:
 
         self.search_rbs = [Radiobutton(f2, text = self.default, value = self.default,
                                        variable = self.var_two, fg = "white", font = ("Sans Serif", 14),
-                                       padx = 20,bg = "#500178", pady = 10, selectcolor = "#500178")]
+                                       padx = 20,bg = "#500178", pady = 10, selectcolor = "#500178",
+                                       activebackground = "#500178", activeforeground = "white")]
         
         for i in range(self.num_radiobuttons):
             self.search_rbs.append(Radiobutton(f2, text = f"{i+1}/5", value = f"{i+1}/5",
                                                variable = self.var_two, fg = "white", pady = 10, padx = 20,
-                                               font = ("Sans Serif", 14), bg = "#500178", selectcolor = "#500178"))
+                                               font = ("Sans Serif", 14), bg = "#500178", selectcolor = "#500178",
+                                               activebackground = "#500178", activeforeground = "white"))
             if i <=2:
                 self.search_rbs[i].grid(row = 1, column = i, sticky = NW)
             else:
@@ -143,15 +147,20 @@ class MovieRaterGUI:
 
         
     def get_to_summary_frame(self):
-        self.summary_rating = self.var_two.get()
+        if self.var_two.get()!= "0":
+            if self.summary_rating == self.default:
+                 self.rating_label.configure(text = "")
+            self.summary_rating = self.var_two.get()
+        else:
+            self.summary_rating = self.default
         self.f1.grid_remove()
 
         self.summary()
 
 
     def summary(self):
-        self.f3.configure(bg = "#d4a8ed", padx = 42, pady = 40)
-        self.var.set(0)
+        self.f3.configure(bg = "#d4a8ed", padx = 43, pady = 40)
+        self.var_two.set(0)
         #Label identifying which rating has been searched for
         self.rating_label = Label(self.f3, text = self.summary_rating, bg = "#d4a8ed", fg = "black",
                                   font = ("Sans Serif", 24))
@@ -172,6 +181,7 @@ class MovieRaterGUI:
         for i in range(len(self.movie_info)): #adding movies that have been rated to the list
                 if self.movie_info[i].rating == self.summary_rating:
                     self.rated_movie_list.append(self.movie_info[i].movie)
+       
 
         for i in range(len(self.rated_movie_list)):        
             self.rated_movies.insert('1.0', """
