@@ -32,7 +32,10 @@ class MovieRaterGUI:
                            Movies("Titanic", self.default),
                            Movies("Jojo Rabbit", self.default),
                            Movies("The Martian", self.default),
-                           Movies("Ant-Man", self.default)]
+                           Movies("Ant-Man", self.default),
+                           Movies("Up", self.default),
+                           Movies("Wall-E", self.default),
+                            Movies("Avatar", self.default)]
         #Labels
 
         self.movie_instruct = Label(self.f1, text = "Please Rate:", anchor = NW, bg = "black",
@@ -41,12 +44,12 @@ class MovieRaterGUI:
         self.movie_instruct.grid(row = 0, column = 0)
 
         self.movie_title = Label(self.f1, text= self.movie_info[self.i].movie, bg = "black",
-                                 fg = "white", font = ("Sans Serif", 16), anchor = NW,
+                                 fg = "white", font = ("Sans Serif", 16), anchor = CENTER,
                                  pady = 20, padx = 20, width = 18)
         self.movie_title.grid(row = 0, column = 1, columnspan = 3)
 
         self.rating_instruct = Label(self.f1, text = "Your Rating:", anchor = NW, fg = "black",
-                                     font = ("Sans Serif", 14), pady = 16, bg = "#d4a8ed",
+                                     font = ("Sans Serif", 14), pady = 20, bg = "#d4a8ed",
                                      padx = 20)
         self.rating_instruct.grid(row = 1, column = 0, sticky = NW)
 
@@ -95,7 +98,7 @@ class MovieRaterGUI:
 
         #Instruction Label
 
-        self.search_instruct = Label(f2, text = "Search for movies with a rating of:",
+        self.search_instruct = Label(f2, text = "Search for movies you've rated:",
                                      fg = "white", bg = "#500178", font = ("Sans Serif", 14),
                                      padx = 58, width = 33)
         self.search_instruct.grid(row = 0, column = 0, columnspan = 4, sticky  = NW)
@@ -105,7 +108,7 @@ class MovieRaterGUI:
         self.var_two = StringVar()
         self.var_two.set(0)
 
-        self.search_rbs = [Radiobutton(f2, text = self.default, value = self.default,
+        self.search_rbs = [Radiobutton(f2, text = f"{self.default} (default)", value = self.default,
                                        variable = self.var_two, fg = "white", font = ("Sans Serif", 10),
                                        padx = 10,bg = "#500178", pady = 10, selectcolor = "#500178",
                                        activebackground = "#500178", activeforeground = "white"),
@@ -128,8 +131,8 @@ class MovieRaterGUI:
         #Search Button
 
         self.searchbtn = Button(f2, text = "Search", bg = "white", fg = "black", font = ("Sans Serif", 10),
-                                command = self.get_to_summary_frame)
-        self.searchbtn.grid(row = 2, column = 3, sticky = SW)
+                                command = self.get_to_summary_frame, anchor = CENTER)
+        self.searchbtn.grid(row = 2, column = 3)
 
         f2.grid(column = 0, row = 10)
 
@@ -140,6 +143,7 @@ class MovieRaterGUI:
     def saverating(self):
         if self.var.get() != "0":
             self.movie_info[self.i].rating = self.var.get()
+        self.var.set(0)
     def nextmovie(self):
         if self.i != (len(self.movie_info)-1):
             self.i+=1
@@ -160,35 +164,38 @@ class MovieRaterGUI:
         
     def get_to_summary_frame(self):
         if self.var_two.get()!= "0":
-            if self.summary_rating == self.default:
+            if self.summary_rating != "":
                 self.rating_label.configure(text = "")
             self.summary_rating = self.var_two.get()
+                
         else:
             self.summary_rating = self.default
+        
         self.f1.grid_remove()
 
         self.summary()
 
 
     def summary(self):
-        self.f3.configure(bg = "#d4a8ed", padx = 43, pady = 40)
+        self.f3.configure(bg = "#d4a8ed", padx = 44, pady = 40)
         self.var_two.set(0)
         #Label identifying which rating has been searched for
         self.rating_label = Label(self.f3, text = self.summary_rating, bg = "#d4a8ed", fg = "black",
-                                  font = ("Sans Serif", 24))
+                                  font = ("Sans Serif", 20))
         self.rating_label.grid(row = 0, column = 1, sticky = NW)
 
         #Back button to rate more movies
 
-        backbtn = Button(self.f3, text = "Rate more movies", bg = "#801bb3", fg = "white", font = ("Sans Serif", 14),
-                         command = self.back_to_rater)
+        backbtn = Button(self.f3, text = "Rate more movies", bg = "#801bb3", fg = "white",
+                         font = ("Sans Serif", 12), command = self.back_to_rater)
         backbtn.grid(row = 0, column = 0, sticky = NW)
 
         #Scrolled Text Box of movies under that rating
 
         self.rated_movie_list = [] #list of movies in that rating
         
-        self.rated_movies = ScrolledText(self.f3, wrap = 'word', font = ("Sans Serif", 20), width = 34, height = 10) #Text Box
+        self.rated_movies = ScrolledText(self.f3, wrap = 'word', font = ("Sans Serif", 14),
+                                         width = 34, height = 15) #Text Box
 
         for i in range(len(self.movie_info)): #adding movies that have been rated to the list
                 if self.movie_info[i].rating == self.summary_rating:
